@@ -36,6 +36,9 @@ inputs:
       #'External reference url. Sets value of `external_ref` on new experience.'
   PR-time-to-merge-condition:
     description: 'Upper and lower bound for time from PR opened to merged in days'
+  github-token:
+    description: 'Token for API requests'
+    default: ${{ github.token }}
 runs:
   using: composite
   steps:
@@ -44,11 +47,12 @@ runs:
       with:
         repository: neelix-io/behaviour-action-testing
         ref: initialize-project
+        token: ${{ inputs.github-token }}
     - name: Get PR data
       id: get-pr-data
       uses: ./.github/actions/get-pr-data
       with:
-        github-token: ${{ github.token }}
+        github-token: ${{ inputs.github-token }}
         pull-number: ${{ github.event.number }}
     - name: Check conditions
       id: check-conditions
