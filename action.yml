@@ -58,7 +58,7 @@ runs:
       id: check-conditions
       uses: ./.github/actions/check-conditions
       with:
-        pr-data: ${{ steps.get-pr-data.outputs.data }}
+        data: ${{ steps.get-pr-data.outputs.data }}
     #- name: Create exprience
       #id: create-experience
       #if: ${{ steps.check-conditions.outputs.satisfied }}
