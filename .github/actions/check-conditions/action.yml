@@ -1,0 +1,14 @@
+name: 'Check conditions'
+description: 'Checks provided PR data against configured requirements'
+inputs:
+  data:
+    description: 'Data relevant to PR'
+    required: true
+  time-to-merge-condition:
+    description: 'Upper and lower limit of PR lifetime in days.'
+outputs:
+  satisfied:
+    description: 'Indicates if all conditions satisfied'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

@@ -1,0 +1,15 @@
+name: 'Get PR data'
+description: 'Retrieves necessary data from GitHub API'
+inputs:
+  github-token:
+    description: 'Token used to fetch data from GitHub API'
+    required: true
+  pull-number:
+    description: 'Pull request number'
+    required: true
+outputs:
+  data:
+    description: 'Data from GitHub API'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
