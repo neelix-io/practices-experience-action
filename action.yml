@@ -3,37 +3,39 @@ description: >
   'Creates a Neelix experience after PR merged if the provided behavioural'
   'conditions are met'
 inputs:
-  #api-token:
-    #description: 'Neelix API token (should be stored as secret)'
-    #required: true
-  #consortium-id:
-    #description: 'ID of consortium experiences will belong to'
-    #required: true
-  #commentary:
-    #description: 'Sets `commentary` field of new experience.'
-    #required: true
-  #weight:
-    #description: >
-      #'Sets `weight` field of new experience. Default used if value not '
-      #'provided.'
-    #required: true
-  #activity-id:
-    #description: >
-      #'ID of an activity belonging to same consortium as experience.'
-      #'Sets `activity_id` field of new experience. '
-  #category-ids:
-    #description: >
-      #'IDs of categoris belonging to same consortium as experience. Use '
-      #'comma-separated list for multiple values (e.g. "1,2,3"). Adds '
-      #'specified categories to new experience. '
-  #team-ids:
-    #description: >
-      #'IDs of teams belonging to same consortium as experience. Use '
-      #'comma-separated list for multiple values (e.g. "1,2,3"). Adds specified '
-      #'teams to new experience. '
-  #external-ref:
-    #description: >
-      #'External reference url. Sets value of `external_ref` on new experience.'
+  api-token:
+    description: 'Neelix API token (should be stored as secret)'
+    required: true
+  consortium-id:
+    description: 'ID of consortium experiences will belong to'
+    required: true
+  commentary:
+    description: 'Sets `commentary` field of new experience.'
+    required: true
+  weight:
+    description: >
+      'Sets `weight` field of new experience. Default used if value not '
+      'provided.'
+    required: true
+  activity-id:
+    description: >
+      'ID of an activity belonging to same consortium as experience.'
+      'Sets `activity_id` field of new experience. '
+  category-ids:
+    description: >
+      'IDs of categoris belonging to same consortium as experience. Use '
+      'comma-separated list for multiple values (e.g. "1,2,3"). Adds '
+      'specified categories to new experience. '
+  team-ids:
+    description: >
+      'IDs of teams belonging to same consortium as experience. Use '
+      'comma-separated list for multiple values (e.g. "1,2,3"). Adds specified '
+      'teams to new experience. '
+  external-ref:
+    description: >
+      'External reference url. Sets value of `external_ref` on new experience.'
+    default: >
+      "https://github.com/${{ github.repository }}/pull/${{ github.event.number }}"
   PR-time-to-merge-condition:
     description: >
       'Upper and lower bound for time from PR opened to merged in days.'
@@ -72,16 +74,16 @@ runs:
         additional-commits-condition: ${{ inputs.PR-additional-commits-condition }}
         total-changes: ${{ steps.get-pr-data.outputs.total-changes }}
         total-changes-condition: ${{ inputs.PR-total-changes-condition }}
-    #- name: Create exprience
-      #id: create-experience
-      #if: ${{ steps.check-conditions.outputs.satisfied }}
-      #uses: neelix-io/create-experience-action@dev
-      #with:
-        #api-token: ${{ inputs.api-token }}
-        #consortium-id: ${{ inputs.consortium-id }}
-        #commentary: ${{ inputs.commentary }}
-        #weight: ${{ inputs.weight }}
-        #activity-id: ${{ inputs.activity-id }}
-        #category-ids: ${{ inputs.category-ids }}
-        #team-ids: ${{ inputs.team-ids }}
-        #external-ref: ${{ inputs.external-ref }}
+    - name: Create exprience
+      id: create-experience
+      if: ${{ steps.check-conditions.outputs.satisfied }}
+      uses: neelix-io/create-experience-action@dev
+      with:
+        api-token: ${{ inputs.api-token }}
+        consortium-id: ${{ inputs.consortium-id }}
+        commentary: ${{ inputs.commentary }}
+        weight: ${{ inputs.weight }}
+        activity-id: ${{ inputs.activity-id }}
+        category-ids: ${{ inputs.category-ids }}
+        team-ids: ${{ inputs.team-ids }}
+        external-ref: ${{ inputs.external-ref }}
