@@ -10,19 +10,38 @@ const pullNumber = +core.getInput('pull-number', { required: true });
 
 const run = async () => {
   try {
-    const res = await octokit.rest.pulls.get({
-      ...repo,
-      pull_number: pullNumber,
-    });
+    const [pulls, commits] = await Promise.all([
+      octokit.rest.pulls.get({
+        ...repo,
+        pull_number: pullNumber,
+      }),
+      octokit.rest.pulls.listCommits({
+        ...repo,
+        pull_number: pullNumber,
+      }),
+    ]);
 
-    core.info(`data:\n${JSON.stringify(res, null, 2)}`);
+    core.info(`data:\n${JSON.stringify(pulls, null, 2)}`);
 
-    const mergedTs = res.data.merged_at;
+    const mergedTs = pulls.data.merged_at;
     if (mergedTs) {
-      const created = new Date(res.data.created_at).valueOf();
+      // duration-in-days
+      const created = new Date(pulls.data.created_at).valueOf();
       const merged = new Date(mergedTs).valueOf();
       const durationInDays = Math.ceil((merged - created) / (1000 * 60 * 60 * 24));
       core.setOutput('duration-in-days', durationInDays);
+
+      // additional-commits
+      const additionalCommits = commits.data
+        .filter(c => {
+          const date = c.commit.author?.date || c.commit.committer?.date;
+          if (!date) {
+            return false;
+          }
+          return new Date(date).valueOf() > merged;
+        })
+        .length;
+      core.setOutput('additional-commits', additionalCommits);
     }
   } catch (err) {
     let error: string | Error = 'Unknown error';

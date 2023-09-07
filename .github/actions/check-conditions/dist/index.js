@@ -2761,27 +2761,57 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const durationInDays = +core.getInput('durationInDays');
-const timeToMerge = core.getInput('time-to-merge-condition');
+const durationInRange = (durationInDays, timeToMerge) => {
+    core.info(`incoming timeToMerge: ${timeToMerge}`);
+    core.info(`incoming durationInDays: ${durationInDays}`);
+    if (!timeToMerge) {
+        return true;
+    }
+    if (isNaN(durationInDays)) {
+        return false;
+    }
+    const [lowerLimit, upperLimit] = timeToMerge.split(',').map(l => +l);
+    if (!isNaN(lowerLimit) || durationInDays < lowerLimit) {
+        core.info(`PR duration ${durationInDays} not gte ${lowerLimit}`);
+        return false;
+    }
+    if (!isNaN(upperLimit) || durationInDays > upperLimit) {
+        core.info(`PR duration ${durationInDays} not lte ${upperLimit}`);
+        return false;
+    }
+    core.info(`PR duration ${durationInDays} is within ${lowerLimit} and ${upperLimit}`);
+    return true;
+};
+const commitsInRange = (commitCount, commitRange) => {
+    core.info(`incoming commitCount: ${commitCount}`);
+    core.info(`incoming commitRange: ${commitRange}`);
+    if (!commitRange) {
+        return true;
+    }
+    if (isNaN(commitCount)) {
+        return false;
+    }
+    const [lowerLimit, upperLimit] = commitRange.split(',').map(l => +l);
+    if (!isNaN(lowerLimit) || commitCount < lowerLimit) {
+        core.info(`PR commit count ${commitCount} not gte ${lowerLimit}`);
+        return false;
+    }
+    if (!isNaN(upperLimit) || commitCount > upperLimit) {
+        core.info(`PR commit count ${commitCount} not lte ${upperLimit}`);
+        return false;
+    }
+    core.info(`PR commits ${commitCount} within ${lowerLimit} and ${upperLimit}`);
+    return true;
+};
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        core.info(`incoming timeToMerge: ${timeToMerge}`);
-        core.info(`incoming durationInDays: ${durationInDays}`);
-        if (timeToMerge && !isNaN(durationInDays)) {
-            const [lowerLimit, upperLimit] = timeToMerge.split(',').map(l => +l);
-            if (!isNaN(lowerLimit) || durationInDays < lowerLimit) {
-                core.info(`PR duration ${durationInDays} not gte ${lowerLimit}`);
-                core.setOutput('satisfied', false);
-                return;
-            }
-            if (!isNaN(upperLimit) || durationInDays > upperLimit) {
-                core.info(`PR duration ${durationInDays} not lte ${upperLimit}`);
-                core.setOutput('satisfied', false);
-                return;
-            }
-            core.info(`PR duration ${durationInDays} is within ${lowerLimit} and ${upperLimit}`);
-            core.setOutput('satisfied', true);
-        }
+        const durationInDays = +core.getInput('duration-in-days');
+        const timeToMerge = core.getInput('time-to-merge-condition');
+        const durationOK = durationInRange(durationInDays, timeToMerge);
+        const additionalCommits = +core.getInput('additional-commits');
+        const additionalCommitsCondition = core.getInput('additional-commits-condition');
+        const commitsOK = commitsInRange(additionalCommits, additionalCommitsCondition);
+        core.setOutput('satisfied', durationOK && commitsOK);
     }
     catch (err) {
         let error = 'Unknown error';

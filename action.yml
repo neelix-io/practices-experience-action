@@ -35,7 +35,12 @@ inputs:
     #description: >
       #'External reference url. Sets value of `external_ref` on new experience.'
   PR-time-to-merge-condition:
-    description: 'Upper and lower bound for time from PR opened to merged in days'
+    description: >
+      'Upper and lower bound for time from PR opened to merged in days.'
+  PR-additional-commits-condition:
+    description: >
+      'Upper and lower limit of commits created after PR opened and before '
+      'merged.'
   github-token:
     description: 'Token for API requests'
     default: ${{ github.token }}
@@ -60,6 +65,8 @@ runs:
       with:
         duration-in-days: ${{ steps.get-pr-data.outputs.duration-in-days }}
         time-to-merge-condition: ${{ inputs.PR-time-to-merge-condition }}
+        additional-commits: ${{ steps.get-pr-data.outputs.additional-commits }}
+        additional-commits-condition: ${{ inputs.PR-additional-commits-condition }}
     #- name: Create exprience
       #id: create-experience
       #if: ${{ steps.check-conditions.outputs.satisfied }}

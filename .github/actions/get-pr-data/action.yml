@@ -10,6 +10,8 @@ inputs:
 outputs:
   duration-in-days:
     description: 'Number of days from PR opened to merged. Not set if PR not merged.'
+  additional-commits:
+    description: 'Count of commits created after PR opened and before merged.'
 runs:
   using: 'node16'
   main: 'dist/index.js'

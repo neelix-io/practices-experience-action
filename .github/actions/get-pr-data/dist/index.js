@@ -9677,14 +9677,30 @@ const repo = github.context.repo;
 const pullNumber = +core.getInput('pull-number', { required: true });
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const res = yield octokit.rest.pulls.get(Object.assign(Object.assign({}, repo), { pull_number: pullNumber }));
-        core.info(`data:\n${JSON.stringify(res, null, 2)}`);
-        const mergedTs = res.data.merged_at;
+        const [pulls, commits] = yield Promise.all([
+            octokit.rest.pulls.get(Object.assign(Object.assign({}, repo), { pull_number: pullNumber })),
+            octokit.rest.pulls.listCommits(Object.assign(Object.assign({}, repo), { pull_number: pullNumber })),
+        ]);
+        core.info(`data:\n${JSON.stringify(pulls, null, 2)}`);
+        const mergedTs = pulls.data.merged_at;
         if (mergedTs) {
-            const created = new Date(res.data.created_at).valueOf();
+            // duration-in-days
+            const created = new Date(pulls.data.created_at).valueOf();
             const merged = new Date(mergedTs).valueOf();
             const durationInDays = Math.ceil((merged - created) / (1000 * 60 * 60 * 24));
             core.setOutput('duration-in-days', durationInDays);
+            // additional-commits
+            const additionalCommits = commits.data
+                .filter(c => {
+                var _a, _b;
+                const date = ((_a = c.commit.author) === null || _a === void 0 ? void 0 : _a.date) || ((_b = c.commit.committer) === null || _b === void 0 ? void 0 : _b.date);
+                if (!date) {
+                    return false;
+                }
+                return new Date(date).valueOf() > merged;
+            })
+                .length;
+            core.setOutput('additional-commits', additionalCommits);
         }
     }
     catch (err) {
