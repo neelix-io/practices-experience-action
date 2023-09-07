@@ -2767,7 +2767,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         core.info(`incoming timeToMerge: ${timeToMerge}`);
         core.info(`incoming durationInDays: ${durationInDays}`);
-        if (timeToMerge && durationInDays && !isNaN(durationInDays)) {
+        if (timeToMerge && !isNaN(durationInDays)) {
             const [lowerLimit, upperLimit] = timeToMerge.split(',').map(l => +l);
             if (!isNaN(lowerLimit) || durationInDays < lowerLimit) {
                 core.info(`PR duration ${durationInDays} not gte ${lowerLimit}`);

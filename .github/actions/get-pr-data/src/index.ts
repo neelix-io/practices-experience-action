@@ -21,7 +21,7 @@ const run = async () => {
     if (mergedTs) {
       const created = new Date(res.data.created_at).valueOf();
       const merged = new Date(mergedTs).valueOf();
-      const durationInDays = (merged - created) / (1000 * 60 * 60 * 24);
+      const durationInDays = Math.ceil((merged - created) / (1000 * 60 * 60 * 24));
       core.setOutput('duration-in-days', durationInDays);
     }
   } catch (err) {
