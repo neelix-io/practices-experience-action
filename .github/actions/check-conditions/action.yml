@@ -6,6 +6,8 @@ inputs:
     required: true
   time-to-merge-condition:
     description: 'Upper and lower limit of PR lifetime in days.'
+  duration-in-days:
+    description: 'Number of days from PR opened to merged. Not set if PR not merged.'
 outputs:
   satisfied:
     description: 'Indicates if all conditions satisfied'

@@ -58,7 +58,8 @@ runs:
       id: check-conditions
       uses: ./.github/actions/check-conditions
       with:
-        data: ${{ steps.get-pr-data.outputs.data }}
+        duration-in-days: ${{ steps.get-pr-data.outputs.duration-in-days }}
+        time-to-merge-condition: ${{ inputs.PR-time-to-merge-condition }}
     #- name: Create exprience
       #id: create-experience
       #if: ${{ steps.check-conditions.outputs.satisfied }}

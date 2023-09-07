@@ -2761,17 +2761,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const data = JSON.parse(core.getInput('data', { required: true }));
+const durationInDays = +core.getInput('durationInDays');
 const timeToMerge = core.getInput('time-to-merge-condition');
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         core.info(`incoming timeToMerge: ${timeToMerge}`);
-        core.info(`incoming data: ${JSON.stringify(data, null, 2)}`);
-        if (timeToMerge) {
+        core.info(`incoming durationInDays: ${durationInDays}`);
+        if (timeToMerge && durationInDays && !isNaN(durationInDays)) {
             const [lowerLimit, upperLimit] = timeToMerge.split(',').map(l => +l);
-            const created = new Date(data.created_at).valueOf();
-            const merged = new Date(data.merged_at).valueOf();
-            const durationInDays = (merged - created) / (1000 * 60 * 60 * 24);
             if (!isNaN(lowerLimit) || durationInDays < lowerLimit) {
                 core.info(`PR duration ${durationInDays} not gte ${lowerLimit}`);
                 core.setOutput('satisfied', false);

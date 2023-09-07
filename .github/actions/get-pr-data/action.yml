@@ -8,8 +8,8 @@ inputs:
     description: 'Pull request number'
     required: true
 outputs:
-  data:
-    description: 'Data from GitHub API'
+  duration-in-days:
+    description: 'Number of days from PR opened to merged. Not set if PR not merged.'
 runs:
   using: 'node16'
   main: 'dist/index.js'

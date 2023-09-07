@@ -10,14 +10,20 @@ const pullNumber = +core.getInput('pull-number', { required: true });
 
 const run = async () => {
   try {
-    const data = await octokit.rest.pulls.get({
+    const res = await octokit.rest.pulls.get({
       ...repo,
       pull_number: pullNumber,
     });
 
-    core.info(`data:\n${JSON.stringify(data, null, 2)}`);
+    core.info(`data:\n${JSON.stringify(res, null, 2)}`);
 
-    core.setOutput('data', data);
+    const mergedTs = res.data.merged_at;
+    if (mergedTs) {
+      const created = new Date(res.data.created_at).valueOf();
+      const merged = new Date(mergedTs).valueOf();
+      const durationInDays = (merged - created) / (1000 * 60 * 60 * 24);
+      core.setOutput('duration-in-days', durationInDays);
+    }
   } catch (err) {
     let error: string | Error = 'Unknown error';
     if (typeof err === 'string') {
