@@ -1,0 +1,19 @@
+name: 'Get PR data'
+description: 'Retrieves necessary data from GitHub API'
+inputs:
+  github-token:
+    description: 'Token used to fetch data from GitHub API'
+    required: true
+  pull-number:
+    description: 'Pull request number'
+    required: true
+outputs:
+  duration-in-days:
+    description: 'Number of days from PR opened to merged. Not set if PR not merged.'
+  additional-commits:
+    description: 'Count of commits created after PR opened and before merged.'
+  total-changes:
+    description: 'Total lines added or deleted in the PR.'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
