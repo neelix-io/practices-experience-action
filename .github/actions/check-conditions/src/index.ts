@@ -16,12 +16,12 @@ const durationInRange = (durationInDays: number, timeToMerge: string) => {
 
   const [lowerLimit, upperLimit] = timeToMerge.split(',').map(l => +l);
 
-  if (!isNaN(lowerLimit) || durationInDays < lowerLimit) {
+  if (!isNaN(lowerLimit) && durationInDays < lowerLimit) {
     core.info(`PR duration ${durationInDays} not gte ${lowerLimit}`)
     return false;
   }
 
-  if (!isNaN(upperLimit) || durationInDays > upperLimit) {
+  if (!isNaN(upperLimit) && durationInDays > upperLimit) {
     core.info(`PR duration ${durationInDays} not lte ${upperLimit}`)
     return false;
   }
@@ -44,12 +44,12 @@ const commitsInRange = (commitCount: number, commitRange: string) => {
 
   const [lowerLimit, upperLimit] = commitRange.split(',').map(l => +l);
 
-  if (!isNaN(lowerLimit) || commitCount < lowerLimit) {
+  if (!isNaN(lowerLimit) && commitCount < lowerLimit) {
     core.info(`PR commit count ${commitCount} not gte ${lowerLimit}`)
     return false;
   }
 
-  if (!isNaN(upperLimit) || commitCount > upperLimit) {
+  if (!isNaN(upperLimit) && commitCount > upperLimit) {
     core.info(`PR commit count ${commitCount} not lte ${upperLimit}`)
     return false;
   }

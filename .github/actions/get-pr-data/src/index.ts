@@ -38,7 +38,7 @@ const run = async () => {
           if (!date) {
             return false;
           }
-          return new Date(date).valueOf() > merged;
+          return new Date(date).valueOf() > created;
         })
         .length;
       core.setOutput('additional-commits', additionalCommits);
