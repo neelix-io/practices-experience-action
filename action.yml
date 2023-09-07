@@ -41,6 +41,9 @@ inputs:
     description: >
       'Upper and lower limit of commits created after PR opened and before '
       'merged.'
+  PR-total-changes-condition:
+    description: >
+      'Upper and lower limit of total lines added or deleted in the PR.'
   github-token:
     description: 'Token for API requests'
     default: ${{ github.token }}
@@ -67,6 +70,8 @@ runs:
         time-to-merge-condition: ${{ inputs.PR-time-to-merge-condition }}
         additional-commits: ${{ steps.get-pr-data.outputs.additional-commits }}
         additional-commits-condition: ${{ inputs.PR-additional-commits-condition }}
+        total-changes: ${{ steps.get-pr-data.outputs.total-changes }}
+        total-changes-condition: ${{ inputs.PR-total-changes-condition }}
     #- name: Create exprience
       #id: create-experience
       #if: ${{ steps.check-conditions.outputs.satisfied }}

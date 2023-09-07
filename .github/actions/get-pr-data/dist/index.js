@@ -9689,6 +9689,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             const merged = new Date(mergedTs).valueOf();
             const durationInDays = Math.ceil((merged - created) / (1000 * 60 * 60 * 24));
             core.setOutput('duration-in-days', durationInDays);
+            // total-changes
+            const additions = pulls.data.additions;
+            const deletions = pulls.data.deletions;
+            core.setOutput('total-changes', additions + deletions);
             // additional-commits
             const additionalCommits = commits.data
                 .filter(c => {

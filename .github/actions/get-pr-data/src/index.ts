@@ -31,6 +31,11 @@ const run = async () => {
       const durationInDays = Math.ceil((merged - created) / (1000 * 60 * 60 * 24));
       core.setOutput('duration-in-days', durationInDays);
 
+      // total-changes
+      const additions = pulls.data.additions;
+      const deletions = pulls.data.deletions;
+      core.setOutput('total-changes', additions + deletions);
+
       // additional-commits
       const additionalCommits = commits.data
         .filter(c => {

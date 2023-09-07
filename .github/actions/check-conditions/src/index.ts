@@ -58,6 +58,33 @@ const commitsInRange = (commitCount: number, commitRange: string) => {
   return true;
 }
 
+const changesInRange = (changeCount: number, changeRange: string) => {
+  core.info(`incoming commitCount: ${changeCount}`);
+  core.info(`incoming commitRange: ${changeRange}`);
+
+  if (!changeRange) {
+    return true;
+  }
+
+  if (isNaN(changeCount)) {
+    return false;
+  }
+
+  const [lowerLimit, upperLimit] = changeRange.split(',').map(l => +l);
+
+  if (!isNaN(lowerLimit) && changeCount < lowerLimit) {
+    core.info(`PR change count ${changeCount} not gte ${lowerLimit}`)
+    return false;
+  }
+
+  if (!isNaN(upperLimit) && changeCount > upperLimit) {
+    core.info(`PR change count ${changeCount} not lte ${upperLimit}`)
+    return false;
+  }
+
+  core.info(`PR changes ${changeCount} within ${lowerLimit} and ${upperLimit}`)
+  return true;
+}
 
 const run = async () => {
   try {
@@ -71,7 +98,12 @@ const run = async () => {
 
     const commitsOK = commitsInRange(additionalCommits, additionalCommitsCondition);
 
-    core.setOutput('satisfied', durationOK && commitsOK);
+    const totalChanges = +core.getInput('total-changes');
+    const totalChangesCondition = core.getInput('total-changes-condition');
+
+    const changesOK = changesInRange(totalChanges, totalChangesCondition);
+
+    core.setOutput('satisfied', durationOK && commitsOK && changesOK);
   } catch (err) {
     let error: string | Error = 'Unknown error';
     if (typeof err === 'string') {

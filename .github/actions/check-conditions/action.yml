@@ -1,9 +1,6 @@
 name: 'Check conditions'
 description: 'Checks provided PR data against configured requirements'
 inputs:
-  data:
-    description: 'Data relevant to PR'
-    required: true
   time-to-merge-condition:
     description: 'Upper and lower limit of PR lifetime in days.'
   duration-in-days:
@@ -15,6 +12,11 @@ inputs:
       'merged.'
   additional-commits:
     description: 'Count of commits created after PR opened and before merged.'
+  total-changes-condition:
+    description: >
+      'Upper and lower limit of total lines added or deleted in the PR.'
+  total-changes:
+    description: 'Total lines added or deleted in the PR.'
 outputs:
   satisfied:
     description: 'Indicates if all conditions satisfied'

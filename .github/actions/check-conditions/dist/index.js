@@ -2803,6 +2803,27 @@ const commitsInRange = (commitCount, commitRange) => {
     core.info(`PR commits ${commitCount} within ${lowerLimit} and ${upperLimit}`);
     return true;
 };
+const changesInRange = (changeCount, changeRange) => {
+    core.info(`incoming commitCount: ${changeCount}`);
+    core.info(`incoming commitRange: ${changeRange}`);
+    if (!changeRange) {
+        return true;
+    }
+    if (isNaN(changeCount)) {
+        return false;
+    }
+    const [lowerLimit, upperLimit] = changeRange.split(',').map(l => +l);
+    if (!isNaN(lowerLimit) && changeCount < lowerLimit) {
+        core.info(`PR change count ${changeCount} not gte ${lowerLimit}`);
+        return false;
+    }
+    if (!isNaN(upperLimit) && changeCount > upperLimit) {
+        core.info(`PR change count ${changeCount} not lte ${upperLimit}`);
+        return false;
+    }
+    core.info(`PR changes ${changeCount} within ${lowerLimit} and ${upperLimit}`);
+    return true;
+};
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const durationInDays = +core.getInput('duration-in-days');
@@ -2811,7 +2832,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         const additionalCommits = +core.getInput('additional-commits');
         const additionalCommitsCondition = core.getInput('additional-commits-condition');
         const commitsOK = commitsInRange(additionalCommits, additionalCommitsCondition);
-        core.setOutput('satisfied', durationOK && commitsOK);
+        const totalChanges = +core.getInput('total-changes');
+        const totalChangesCondition = core.getInput('total-changes-condition');
+        const changesOK = changesInRange(totalChanges, totalChangesCondition);
+        core.setOutput('satisfied', durationOK && commitsOK && changesOK);
     }
     catch (err) {
         let error = 'Unknown error';
