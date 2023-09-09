@@ -2818,7 +2818,6 @@ exports["default"] = (value, range) => {
         return false;
     }
     const [lowerLimit, upperLimit] = range.split(',').map(l => parseInt(l, 10));
-    console.log(`range: ${range}, lower: ${lowerLimit}, upper: ${upperLimit}`);
     if (!isNaN(lowerLimit) && value < lowerLimit) {
         return false;
     }

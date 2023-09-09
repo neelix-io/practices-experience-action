@@ -15,7 +15,6 @@ export default (value: number, range: string) => {
   }
 
   const [lowerLimit, upperLimit] = range.split(',').map(l => parseInt(l, 10));
-  console.log(`range: ${range}, lower: ${lowerLimit}, upper: ${upperLimit}`)
 
   if (!isNaN(lowerLimit) && value < lowerLimit) {
     return false;
