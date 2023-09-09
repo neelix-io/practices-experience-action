@@ -2759,82 +2759,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const durationInRange = (durationInDays, timeToMerge) => {
-    core.info(`incoming timeToMerge: ${timeToMerge}`);
-    core.info(`incoming durationInDays: ${durationInDays}`);
-    if (!timeToMerge) {
-        return true;
-    }
-    if (isNaN(durationInDays)) {
-        return false;
-    }
-    const [lowerLimit, upperLimit] = timeToMerge.split(',').map(l => +l);
-    if (!isNaN(lowerLimit) && durationInDays < lowerLimit) {
-        core.info(`PR duration ${durationInDays} not gte ${lowerLimit}`);
-        return false;
-    }
-    if (!isNaN(upperLimit) && durationInDays > upperLimit) {
-        core.info(`PR duration ${durationInDays} not lte ${upperLimit}`);
-        return false;
-    }
-    core.info(`PR duration ${durationInDays} is within ${lowerLimit} and ${upperLimit}`);
-    return true;
-};
-const commitsInRange = (commitCount, commitRange) => {
-    core.info(`incoming commitCount: ${commitCount}`);
-    core.info(`incoming commitRange: ${commitRange}`);
-    if (!commitRange) {
-        return true;
-    }
-    if (isNaN(commitCount)) {
-        return false;
-    }
-    const [lowerLimit, upperLimit] = commitRange.split(',').map(l => +l);
-    if (!isNaN(lowerLimit) && commitCount < lowerLimit) {
-        core.info(`PR commit count ${commitCount} not gte ${lowerLimit}`);
-        return false;
-    }
-    if (!isNaN(upperLimit) && commitCount > upperLimit) {
-        core.info(`PR commit count ${commitCount} not lte ${upperLimit}`);
-        return false;
-    }
-    core.info(`PR commits ${commitCount} within ${lowerLimit} and ${upperLimit}`);
-    return true;
-};
-const changesInRange = (changeCount, changeRange) => {
-    core.info(`incoming commitCount: ${changeCount}`);
-    core.info(`incoming commitRange: ${changeRange}`);
-    if (!changeRange) {
-        return true;
-    }
-    if (isNaN(changeCount)) {
-        return false;
-    }
-    const [lowerLimit, upperLimit] = changeRange.split(',').map(l => +l);
-    if (!isNaN(lowerLimit) && changeCount < lowerLimit) {
-        core.info(`PR change count ${changeCount} not gte ${lowerLimit}`);
-        return false;
-    }
-    if (!isNaN(upperLimit) && changeCount > upperLimit) {
-        core.info(`PR change count ${changeCount} not lte ${upperLimit}`);
-        return false;
-    }
-    core.info(`PR changes ${changeCount} within ${lowerLimit} and ${upperLimit}`);
-    return true;
-};
+const compare_range_1 = __importDefault(__nccwpck_require__(611));
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const durationInDays = +core.getInput('duration-in-days');
         const timeToMerge = core.getInput('time-to-merge-condition');
-        const durationOK = durationInRange(durationInDays, timeToMerge);
+        const durationOK = (0, compare_range_1.default)(durationInDays, timeToMerge);
         const additionalCommits = +core.getInput('additional-commits');
         const additionalCommitsCondition = core.getInput('additional-commits-condition');
-        const commitsOK = commitsInRange(additionalCommits, additionalCommitsCondition);
+        const commitsOK = (0, compare_range_1.default)(additionalCommits, additionalCommitsCondition);
         const totalChanges = +core.getInput('total-changes');
         const totalChangesCondition = core.getInput('total-changes-condition');
-        const changesOK = changesInRange(totalChanges, totalChangesCondition);
+        const changesOK = (0, compare_range_1.default)(totalChanges, totalChangesCondition);
         core.setOutput('satisfied', durationOK && commitsOK && changesOK);
     }
     catch (err) {
@@ -2852,6 +2793,40 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 run();
+
+
+/***/ }),
+
+/***/ 611:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/**
+ * Checks if value is within provided range. Range should be string with format
+ * `x,y` where x and y are integers. Function returns true if value is within
+ * range [x, y]. If x or y are omitted, compares value against the provided
+ * limit only, e.g. range `x,` will return true if value greater or equal to
+ * 'x'.
+ */
+exports["default"] = (value, range) => {
+    if (!range) {
+        return true;
+    }
+    if (isNaN(value)) {
+        return false;
+    }
+    const [lowerLimit, upperLimit] = range.split(',').map(l => parseInt(l, 10));
+    console.log(`range: ${range}, lower: ${lowerLimit}, upper: ${upperLimit}`);
+    if (!isNaN(lowerLimit) && value < lowerLimit) {
+        return false;
+    }
+    if (!isNaN(upperLimit) && value > upperLimit) {
+        return false;
+    }
+    return true;
+};
 
 
 /***/ }),
