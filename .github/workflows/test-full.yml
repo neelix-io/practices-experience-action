@@ -31,5 +31,5 @@ jobs:
           team-ids: ${{ secrets.TEST_TEAM_IDS }}
           PR-time-to-merge-condition: 1,3
           PR-additional-commits-condition: 2,5
-          PR-total-changes-condition: 10,1000
+          PR-total-changes-condition: 10,
           skip-setup: 'true'
