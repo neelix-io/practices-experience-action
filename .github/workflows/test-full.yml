@@ -32,5 +32,4 @@ jobs:
           PR-time-to-merge-condition: 1,3
           PR-additional-commits-condition: 2,5
           PR-total-changes-condition: 10,1000
-          github-token: ${{ secrets.TEMP_PAT }}  # TODO: remove before make public
           skip-setup: 'true'
