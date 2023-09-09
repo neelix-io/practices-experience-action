@@ -31,6 +31,10 @@ describe('compare-range util function', () => {
     }
   );
 
+  test('returns `true` if no limit provided', () => {
+    expect(compareRange(-1000, '')).toBe(true);
+  });
+
   test(
     'returns `false` if value outside range [x, y] when both limits provided',
     () => {
