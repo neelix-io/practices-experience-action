@@ -9681,18 +9681,17 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             octokit.rest.pulls.get(Object.assign(Object.assign({}, repo), { pull_number: pullNumber })),
             octokit.rest.pulls.listCommits(Object.assign(Object.assign({}, repo), { pull_number: pullNumber })),
         ]);
-        core.info(`data:\n${JSON.stringify(pulls, null, 2)}`);
         const mergedTs = pulls.data.merged_at;
         if (mergedTs) {
-            // duration-in-days
+            // days-to-merge
             const created = new Date(pulls.data.created_at).valueOf();
             const merged = new Date(mergedTs).valueOf();
             const durationInDays = Math.ceil((merged - created) / (1000 * 60 * 60 * 24));
-            core.setOutput('duration-in-days', durationInDays);
-            // total-changes
+            core.setOutput('days-to-merge', durationInDays);
+            // code-changed
             const additions = pulls.data.additions;
             const deletions = pulls.data.deletions;
-            core.setOutput('total-changes', additions + deletions);
+            core.setOutput('code-changed', additions + deletions);
             // additional-commits
             const additionalCommits = commits.data
                 .filter(c => {

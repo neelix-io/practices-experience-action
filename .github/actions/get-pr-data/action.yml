@@ -8,11 +8,11 @@ inputs:
     description: 'Pull request number'
     required: true
 outputs:
-  duration-in-days:
+  days-to-merge:
     description: 'Number of days from PR opened to merged. Not set if PR not merged.'
   additional-commits:
     description: 'Count of commits created after PR opened and before merged.'
-  total-changes:
+  code-changed:
     description: 'Total lines added or deleted in the PR.'
 runs:
   using: 'node16'

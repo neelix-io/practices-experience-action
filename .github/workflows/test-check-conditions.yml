@@ -3,7 +3,7 @@ name: Test check-conditions action code
 on: [pull_request, workflow_dispatch]
 
 jobs:
-  test-process-reviews:
+  test-check-conditions:
     runs-on: ubuntu-latest
     steps:
       - name: Setup

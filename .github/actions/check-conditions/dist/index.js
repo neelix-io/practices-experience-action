@@ -2767,15 +2767,15 @@ const core = __importStar(__nccwpck_require__(186));
 const compare_range_1 = __importDefault(__nccwpck_require__(611));
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const durationInDays = +core.getInput('duration-in-days');
-        const timeToMerge = core.getInput('time-to-merge-condition');
-        const durationOK = (0, compare_range_1.default)(durationInDays, timeToMerge);
+        const daysToMerge = +core.getInput('days-to-merge');
+        const daysToMergeLimit = core.getInput('days-to-merge-limit');
+        const durationOK = (0, compare_range_1.default)(daysToMerge, daysToMergeLimit);
         const additionalCommits = +core.getInput('additional-commits');
-        const additionalCommitsCondition = core.getInput('additional-commits-condition');
-        const commitsOK = (0, compare_range_1.default)(additionalCommits, additionalCommitsCondition);
-        const totalChanges = +core.getInput('total-changes');
-        const totalChangesCondition = core.getInput('total-changes-condition');
-        const changesOK = (0, compare_range_1.default)(totalChanges, totalChangesCondition);
+        const additionalCommitsLimit = core.getInput('additional-commits-limit');
+        const commitsOK = (0, compare_range_1.default)(additionalCommits, additionalCommitsLimit);
+        const codeChanged = +core.getInput('code-changed');
+        const codeChangedLimit = core.getInput('code-changed-limit');
+        const changesOK = (0, compare_range_1.default)(codeChanged, codeChangedLimit);
         core.setOutput('satisfied', durationOK && commitsOK && changesOK);
     }
     catch (err) {

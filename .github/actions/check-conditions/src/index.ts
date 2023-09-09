@@ -4,20 +4,20 @@ import compareRange from './util/compare-range';
 
 const run = async () => {
   try {
-    const durationInDays = +core.getInput('duration-in-days');
-    const timeToMerge = core.getInput('time-to-merge-condition');
+    const daysToMerge = +core.getInput('days-to-merge');
+    const daysToMergeLimit = core.getInput('days-to-merge-limit');
 
-    const durationOK = compareRange(durationInDays, timeToMerge);
+    const durationOK = compareRange(daysToMerge, daysToMergeLimit);
 
     const additionalCommits = +core.getInput('additional-commits');
-    const additionalCommitsCondition = core.getInput('additional-commits-condition');
+    const additionalCommitsLimit = core.getInput('additional-commits-limit');
 
-    const commitsOK = compareRange(additionalCommits, additionalCommitsCondition);
+    const commitsOK = compareRange(additionalCommits, additionalCommitsLimit);
 
-    const totalChanges = +core.getInput('total-changes');
-    const totalChangesCondition = core.getInput('total-changes-condition');
+    const codeChanged = +core.getInput('code-changed');
+    const codeChangedLimit = core.getInput('code-changed-limit');
 
-    const changesOK = compareRange(totalChanges, totalChangesCondition);
+    const changesOK = compareRange(codeChanged, codeChangedLimit);
 
     core.setOutput('satisfied', durationOK && commitsOK && changesOK);
   } catch (err) {

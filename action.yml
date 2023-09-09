@@ -1,4 +1,4 @@
-name: 'Behaviour Action Testing'
+name: 'Practices Experience Action'
 description: >
   'Creates a Neelix experience after PR merged if the provided behavioural'
   'conditions are met'
@@ -36,14 +36,14 @@ inputs:
       'External reference url. Sets value of `external_ref` on new experience.'
     default: >
       "https://github.com/${{ github.repository }}/pull/${{ github.event.number }}"
-  PR-time-to-merge-condition:
+  days-to-merge-limit:
     description: >
       'Upper and lower bound for time from PR opened to merged in days.'
-  PR-additional-commits-condition:
+  additional-commits-limit:
     description: >
       'Upper and lower limit of commits created after PR opened and before '
       'merged.'
-  PR-total-changes-condition:
+  code-changed-limit:
     description: >
       'Upper and lower limit of total lines added or deleted in the PR.'
   github-token:
@@ -60,8 +60,8 @@ runs:
       if: ${{ inputs.skip-setup != 'true' }}
       uses: actions/checkout@v3
       with:
-        repository: neelix-io/behaviour-action-testing
-        ref: test
+        repository: neelix-io/practices-experience-action
+        ref: docs
         token: ${{ inputs.github-token }}
     - name: Get PR data
       id: get-pr-data
@@ -73,12 +73,12 @@ runs:
       id: check-conditions
       uses: ./.github/actions/check-conditions
       with:
-        duration-in-days: ${{ steps.get-pr-data.outputs.duration-in-days }}
-        time-to-merge-condition: ${{ inputs.PR-time-to-merge-condition }}
+        days-to-merge: ${{ steps.get-pr-data.outputs.days-to-merge }}
+        days-to-merge-limit: ${{ inputs.days-to-merge-limit }}
         additional-commits: ${{ steps.get-pr-data.outputs.additional-commits }}
-        additional-commits-condition: ${{ inputs.PR-additional-commits-condition }}
-        total-changes: ${{ steps.get-pr-data.outputs.total-changes }}
-        total-changes-condition: ${{ inputs.PR-total-changes-condition }}
+        additional-commits-limit: ${{ inputs.additional-commits-limit }}
+        code-changed: ${{ steps.get-pr-data.outputs.code-changed }}
+        code-changed-limit: ${{ inputs.code-changed-limit }}
     - name: Create exprience
       id: create-experience
       if: ${{ steps.check-conditions.outputs.satisfied }}
