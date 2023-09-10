@@ -31,5 +31,5 @@ jobs:
           category-ids: ${{ secrets.TEST_CATEGORY_IDS }}
           team-ids: ${{ secrets.TEST_TEAM_IDS }}
           days-to-merge-limit: 1,3
-          code-changed-limit: 10,
+          code-changed-limit: 1,
           skip-setup: 'true'
