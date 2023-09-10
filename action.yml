@@ -61,7 +61,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: neelix-io/practices-experience-action
-        ref: docs
+        ref: v1.0.0
         token: ${{ inputs.github-token }}
     - name: Get PR data
       id: get-pr-data
@@ -82,7 +82,7 @@ runs:
     - name: Create exprience
       id: create-experience
       if: ${{ steps.check-conditions.outputs.satisfied }}
-      uses: neelix-io/create-experience-action@dev
+      uses: neelix-io/create-experience-action@v1.0.0
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
