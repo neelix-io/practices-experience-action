@@ -35,7 +35,7 @@ inputs:
     description: >
       'External reference url. Sets value of `external_ref` on new experience.'
     default: >
-      "https://github.com/${{ github.repository }}/pull/${{ github.event.number }}"
+      https://github.com/${{ github.repository }}/pull/${{ github.event.number }}
   days-to-merge-limit:
     description: >
       'Upper and lower bound for time from PR opened to merged in days.'
