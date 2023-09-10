@@ -61,7 +61,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: neelix-io/practices-experience-action
-        ref: main
+        ref: v1.0.0
         token: ${{ inputs.github-token }}
     - name: Get PR data
       id: get-pr-data
