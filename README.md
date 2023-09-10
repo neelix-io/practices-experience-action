@@ -1,13 +1,27 @@
 # Neelix Practices Experience
 
-This GitHub action conditionally creates a Neelix Experience based three
-observed behavioral parameters - 
-[number of additional commits](#additional-commits),
+This action conditionally creates a Neelix Experience based three observed
+behavioral parameters - [number of additional commits](#additional-commits),
 [days to merge](#days-to-merge) and [lines of code changed](#code-changed).
 This action is intended to be used only when a PR is merged and may break or
 have unexpected behavior in other circumstances. If you're looking for an
 action with more direct control over the Experience created, check out
 [create-experience-action](https://github.com/neelix-io/create-experience-action).
+
+This GitHub Action will serve as an invaluable tool for your development team,
+enabling you to seamlessly automate the assessment of joint coding practices.
+This offering is a [Neelix.IO](https://www.neelix.io)
+[platform](https://platform.neelix.io/github-actions) offering to support your
+workflow with the [Team Journal](https://team.neelix.io/team-journal). Empower
+a team culture that cares about the development quality of the code, identifes
+areas for improvement, and tracks progress over time. This automated approach
+not only streamlines the retrospective process but also fosters a culture of
+continuous growth and learning within the team. Through the insights gained, you
+will able to engage in more meaningful and potent retrospective conversations,
+highlighting both individual and collective strengths while pinpointing areas
+for enhancement. Ultimately, this collaborative effort will propel your team
+towards becoming an even more proficient and cohesive development unit,
+dedicated to delivering top-notch solutions and driving innovation.
 
 ## Usage
 
@@ -21,10 +35,10 @@ Provide the target consortium ID to the action, as well as any additional
 parameters you would like to include.
 
 
-### Example:
+### Example
 
 ```yaml
-name: Create Neelix Simple Net Experience
+name: Create Neelix Practices Experience
 
 on:
   pull_request:
@@ -60,11 +74,11 @@ jobs:
 * activity-id: ID of an activity belonging to same consortium as experience.
   Sets `activity_id` field of new experience.
 * category-ids: IDs of categories belonging to same consortium as experience.
-  Use comma-separated list for multiple values (e.g. "1,2,3"). Adds specified
-  categories to new experience.
-* team-ids: IDs of teams belonging to same consortium as experience. Use
-  comma-separated list for multiple values (e.g. "1,2,3"). Adds specified teams
-  to new experience.
+  Adds specified categories to new experience. Use comma-separated list for
+  multiple values (e.g. "1,2,3").
+* team-ids: IDs of teams belonging to same consortium as experience. Adds
+  specified teams to new experience. Use comma-separated list for multiple
+  values (e.g. "1,2,3"). 
 * days-to-merge-limit: [Additional commits](#additional-commits) upper and/or
   lower limit.
 * additional-commits-limit: [Days to merge](#days-to-merge) upper and/or lower
