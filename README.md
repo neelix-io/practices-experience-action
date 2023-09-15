@@ -49,6 +49,8 @@ jobs:
   create-practices-experience:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     steps:
       - uses: neelix-io/practices-experience-action@v1
         with:
