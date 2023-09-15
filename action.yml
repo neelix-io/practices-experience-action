@@ -1,4 +1,8 @@
 name: 'Practices Experience Action'
+author: Neelix.IO
+branding:
+  icon: message-square
+  color: white
 description: >
   'Creates a Neelix experience after PR merged if the provided behavioural'
   'conditions are met'
