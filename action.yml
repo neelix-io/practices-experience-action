@@ -85,7 +85,7 @@ runs:
         code-changed-limit: ${{ inputs.code-changed-limit }}
     - name: Create exprience
       id: create-experience
-      if: ${{ steps.check-conditions.outputs.satisfied }}
+      if: ${{ steps.check-conditions.outputs.satisfied == 'true' }}
       uses: neelix-io/create-experience-action@v1.0.0
       with:
         api-token: ${{ inputs.api-token }}
